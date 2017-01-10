@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import LoginForm
+from .forms import LoginForm,CreateUserForm
 from django.contrib.auth import authenticate,login as login_django,logout as logout_django
 from django.contrib.auth.decorators import login_required
 
@@ -40,4 +40,18 @@ def dashboard(request):
 def logout(request):
 	logout_django(request)
 	return redirect('client:login')
+
+def create(request): 
+	form = CreateUserForm(request.POST or None)
+	if request.method == 'POST':
+		if form.is_valid():
+			user = form.save(commit=False)
+			user.set_password(user.password)
+			user.save()
+		return redirect('client:login')
+	context={
+	'form': form
+	}
+	return render(request,'clients/create.html',context)
+
 
