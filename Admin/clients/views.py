@@ -1,8 +1,74 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import LoginForm,CreateUserForm
+from .forms import LoginForm,CreateUserForm,EditUserForm
 from django.contrib.auth import authenticate,login as login_django,logout as logout_django
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View,DetailView,CreateView
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import User
+
+
+class ShowView(DetailView):
+	model = User
+	template_name = 'clients/show.html'
+	slug_field ='username'
+	slug_url_kwarg = 'username_url'
+
+class LoginView(View):
+	form = LoginForm()
+	message = None
+	template = 'clients/login.html'
+
+	def get(self,request,*args,**kwargs):
+		if request.user.is_authenticated():
+			return redirect('client:dashboard')
+		return render(request,self.template, self.get_context())
+
+	def post(self,request,*args,**kwargs):
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(username=username,password=password)	
+		if user is not None:
+			login_django(request,user)
+			return redirect('client:dashboard')
+		else:
+			self.message = "User or password incorrect"
+		return render(request,'clients/login.html', self.get_context())
+
+	def get_context(self):
+		return {'form':self.form,'message':self.message}
+
+
+class DashboardView(LoginRequiredMixin,View):
+	login_url = 'client:login'
+	def get(self,request,*args,**kwargs):
+		return render(request,'clients/dashboard.html', {})
+
+class Create(CreateView):
+	success_url = reverse_lazy('client:login')
+	template_name = 'clients/create.html'
+	model = User
+	form_class = CreateUserForm
+
+	def form_valid(self,form):
+		self.object = form.save(commit=False)
+		self.object.set_password(self.object.password)
+		self.object.save()
+		return HttpResponseRedirect(self.get_success_url())
+ 
+
+class Edit(UpdateView):
+	model = User
+	template_name = 'clients/edit.html'
+	form_class = EditUserForm
+	success_url = reverse_lazy('client:dashboard')
+
+	def get_object(self,queryset = None):
+		return self.request.user
+
+
 
 def login(request):
 	if request.user.is_authenticated():
@@ -48,7 +114,7 @@ def create(request):
 			user = form.save(commit=False)
 			user.set_password(user.password)
 			user.save()
-		return redirect('client:login')
+			return redirect('client:login')
 	context={
 	'form': form
 	}
