@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import LoginForm,CreateUserForm,EditUserForm
-from django.contrib.auth import authenticate,login as login_django,logout as logout_django
+from .forms import LoginForm,CreateUserForm,EditUserForm,EditPassword
+from django.contrib.auth import authenticate,update_session_auth_hash,login as login_django,logout as logout_django
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View,DetailView,CreateView
 from django.views.generic.edit import UpdateView
@@ -59,7 +59,7 @@ class Create(CreateView):
 		return HttpResponseRedirect(self.get_success_url())
  
 
-class Edit(UpdateView):
+class Edit(UpdateView): 
 	model = User
 	template_name = 'clients/edit.html'
 	form_class = EditUserForm
@@ -67,6 +67,21 @@ class Edit(UpdateView):
 
 	def get_object(self,queryset = None):
 		return self.request.user
+
+def edit_password(request):
+	form = EditPassword(request.POST or None)
+	if request.method =='POST':
+		if form.is_valid():
+			current_password = form.cleaned_data['password']
+			new_password = form.cleaned_data['new_password']
+			if authenticate(username=request.user.username, password=current_password):
+				request.user.set_password(new_password)
+				request.user.save()
+				update_session_auth_hash(request,request.user)
+				message = "password actualizado"
+
+	context = {'form':form}
+	return render(request,'clients/edit_password.html',context)
 
 
 
@@ -119,5 +134,7 @@ def create(request):
 	'form': form
 	}
 	return render(request,'clients/create.html',context)
+
+
 
 
