@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import LoginForm,CreateUserForm,EditUserForm,EditPassword
+from .forms import LoginUserForm,CreateUserForm,EditUserForm,EditPasswordForm
 from django.contrib.auth import authenticate,update_session_auth_hash,login as login_django,logout as logout_django
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View,DetailView,CreateView
@@ -17,7 +17,7 @@ class ShowView(DetailView):
 	slug_url_kwarg = 'username_url'
 
 class LoginView(View):
-	form = LoginForm()
+	form = LoginUserForm()
 	message = None
 	template = 'clients/login.html'
 
@@ -69,7 +69,8 @@ class Edit(UpdateView):
 		return self.request.user
 
 def edit_password(request):
-	form = EditPassword(request.POST or None)
+	message = ""
+	form = EditPasswordForm(request.POST or None)
 	if request.method =='POST':
 		if form.is_valid():
 			current_password = form.cleaned_data['password']
@@ -80,7 +81,7 @@ def edit_password(request):
 				update_session_auth_hash(request,request.user)
 				message = "password actualizado"
 
-	context = {'form':form}
+	context = {'form':form,'message':message}
 	return render(request,'clients/edit_password.html',context)
 
 

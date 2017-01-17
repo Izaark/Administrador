@@ -10,12 +10,12 @@ ERROR_MESSAGE_EMAIL = {'required': 'El username es nesesario',
 
 #Functions
 def password_validation(value_password):
-	if len(value_password) <5:
+	if len(value_password) < 5:
 		raise forms.ValidationError('The password requires minimun 5 characters')
 
 
 #Class
-class LoginForm(forms.Form):
+class LoginUserForm(forms.Form):
 	username = forms.CharField(max_length=30)
 	password = forms.CharField(max_length=20, widget=forms.PasswordInput())
 
@@ -35,7 +35,7 @@ class EditUserForm(forms.ModelForm):
 		model = User
 		fields =('username','email','first_name','last_name')
 
-class EditPassword(forms.Form):
+class EditPasswordForm(forms.Form):
 	password = forms.CharField(max_length=20, widget=forms.PasswordInput())
 	new_password = forms.CharField(max_length=20, widget=forms.PasswordInput(),validators=[password_validation])
 	repeat_password = forms.CharField(max_length=20, widget=forms.PasswordInput(),validators=[password_validation])
