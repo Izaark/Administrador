@@ -1,13 +1,15 @@
+from django.contrib.auth import authenticate,update_session_auth_hash,login as login_django,logout as logout_django
+from .forms import LoginUserForm,CreateUserForm,EditUserForm,EditPasswordForm
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import LoginUserForm,CreateUserForm,EditUserForm,EditPasswordForm
-from django.contrib.auth import authenticate,update_session_auth_hash,login as login_django,logout as logout_django
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View,DetailView,CreateView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 class ShowView(DetailView):
@@ -15,7 +17,6 @@ class ShowView(DetailView):
 	template_name = 'clients/show.html'
 	slug_field ='username'
 	slug_url_kwarg = 'username_url'
-
 class LoginView(View):
 	form = LoginUserForm()
 	message = None
@@ -39,13 +40,10 @@ class LoginView(View):
 
 	def get_context(self):
 		return {'form':self.form,'message':self.message}
-
-
 class DashboardView(LoginRequiredMixin,View):
 	login_url = 'client:login'
 	def get(self,request,*args,**kwargs):
 		return render(request,'clients/dashboard.html', {})
-
 class Create(CreateView):
 	success_url = reverse_lazy('client:login')
 	template_name = 'clients/create.html'
@@ -57,33 +55,39 @@ class Create(CreateView):
 		self.object.set_password(self.object.password)
 		self.object.save()
 		return HttpResponseRedirect(self.get_success_url())
- 
-
-class Edit(UpdateView): 
+class Edit(LoginRequiredMixin,UpdateView,SuccessMessageMixin):
+	login_url ='client:login'
 	model = User
 	template_name = 'clients/edit.html'
 	form_class = EditUserForm
-	success_url = reverse_lazy('client:dashboard')
+	success_url = reverse_lazy('client:edit')
+	success_message = "Tu usuario a sido actualizado"
+
+	def form_valid(self,request,*args,**kwargs):
+		messages.success(self.request,self.success_message)
+		return super(Edit,self).form_valid(request,*args,**kwargs)
+	
 
 	def get_object(self,queryset = None):
 		return self.request.user
 
 def edit_password(request):
-	message = ""
+	message = None
 	form = EditPasswordForm(request.POST or None)
 	if request.method =='POST':
 		if form.is_valid():
 			current_password = form.cleaned_data['password']
 			new_password = form.cleaned_data['new_password']
 			if authenticate(username=request.user.username, password=current_password):
-				request.user.set_password(new_password)
+				request.user.set_password( new_password )
 				request.user.save()
 				update_session_auth_hash(request,request.user)
 				message = "password actualizado"
-
-	context = {'form':form,'message':message}
+				messages.success(request,'password actualizado !')
+			else:
+				messages.error(request,'No se puede actualizar el password')
+	context = {'form':form}
 	return render(request,'clients/edit_password.html',context)
-
 
 
 def login(request):
@@ -113,16 +117,14 @@ def login(request):
 	'message': message
 	}
 	return render(request,'clients/login.html', context)
-
 @login_required(login_url = 'client:login')
 def dashboard(request):
 	return render(request,'clients/dashboard.html', {})
-
 @login_required(login_url = 'client:login')	
+
 def logout(request):
 	logout_django(request)
 	return redirect('client:login')
-
 def create(request): 
 	form = CreateUserForm(request.POST or None)
 	if request.method == 'POST':
@@ -135,7 +137,5 @@ def create(request):
 	'form': form
 	}
 	return render(request,'clients/create.html',context)
-
-
 
 
