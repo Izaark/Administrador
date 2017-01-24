@@ -1,13 +1,17 @@
-<h3>Update User</h3>
-{% if messages %}
-	<ul>
-	{% for message in messages %}
-	<li>{{ message }}</li>	
-	{% endfor %}
-	</ul>
-{% endif %}
-<form method="post" action="">
+	{% extends "bases/edit_base.html" %}
+
+	{% block title %}
+	Editar usuario	
+	{% endblock title %}
+	{% block subtitle %}
+	Ediar usuario
+	{% endblock subtitle %}
+	{% block content %}
+	<form method="post" action="">
 	{% csrf_token %}
 	{{ form.as_p}}
-	<input type="submit" value="Update">
+	<input type="submit" value="Actualizar usuario">
 </form>
+	{% endblock content %} 
+</body>
+</html>

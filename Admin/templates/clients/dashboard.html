@@ -1,5 +1,14 @@
-<h2>Welcome</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dashboard</title>
+</head>
+<body>
+	<h2>Welcome</h2>
 <a href="{% url 'client:logout' %}">Logout</a>
 <a href="{% url 'client:show'  user.username %}">show</a>
 <a href="{% url 'client:edit' %}">edit</a>
 <a href="{% url 'client:edit_password' %}">Edit Password</a>
+</body>
+</html>

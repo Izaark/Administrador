@@ -82,7 +82,6 @@ def edit_password(request):
 				request.user.set_password( new_password )
 				request.user.save()
 				update_session_auth_hash(request,request.user)
-				message = "password actualizado"
 				messages.success(request,'password actualizado !')
 			else:
 				messages.error(request,'No se puede actualizar el password')

@@ -1,6 +1,21 @@
-<h3>Create new client</h3>
-<form action="" method="POST">
+{% extends "bases/base_admin.html" %}
+
+{% block title %}
+  registro
+{% endblock title %}
+
+{% block scripts %}
+  
+{% endblock scripts %}
+
+{% block content %}
+  <form action="" method="POST">
 	 {% csrf_token %} 
 	{{form.as_p}}
-	<input type="submit" value="create">
+	<input type="submit" value="Registrar">
 </form> 
+{% endblock content %}
+
+{% block footer %}
+  <p>Ya tengo con una <a href="{% url 'client:login' %}">cuenta</a></p>
+{% endblock footer %}

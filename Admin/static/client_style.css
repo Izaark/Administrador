@@ -1,0 +1,9 @@
+.error_message{
+	padding: 5px;
+	color: red; 
+}
+.success_message{
+	padding: 5px;
+	color: #01DF01;
+}
+

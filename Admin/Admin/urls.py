@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from .views import home
+from .views import home,error_404
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^clients/', include("clients.urls")),
     url(r'^$',home,name='home'),
 
+
 ]
+handler404 = error_404
