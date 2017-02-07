@@ -19,6 +19,11 @@ class LoginUserForm(forms.Form):
 	username = forms.CharField(max_length=30)
 	password = forms.CharField(max_length=20, widget=forms.PasswordInput())
 
+	def __init__(self, *args, **kwargs):
+	    super(LoginUserForm, self).__init__(*args, **kwargs)
+	    self.fields['username'].widget.attrs.update({'id':'username_login','class':'input_login'})
+	    self.fields['password'].widget.attrs.update({'id':'username_login','class':'input_login'})
+
 class CreateUserForm(forms.ModelForm):
 	username = forms.CharField(max_length=30, error_messages=ERROR_MESSAGE_USER)
 	password = forms.CharField(max_length=20, widget=forms.PasswordInput(),error_messages=ERROR_MESSAGE_PASSWORD)

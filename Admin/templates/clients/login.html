@@ -6,16 +6,33 @@
 {% endblock title %}
 
 {% block scripts %}
-  
+{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/forms.css" %}">
 {% endblock scripts %}
 
 {% block content %}
-  <form method="post" action="">
+<div class="class_container_form">
+  <form method="post" action="" class="form-registro">
 	{% csrf_token %}
-	{{ form.as_p}}
-	<input type="submit" value="ingreso">
+
+	{% for field in form %}
+		<div class="row">
+			<div class="input-field col s12">
+				{% if field.errors %}
+				{{field.errors}}					
+				{% endif %}
+				{{field}}
+				<label class="{% for class in field.label_classes %} {{class}}
+				{% endfor %}" for="{{field.name}}">{{field.label}}
+				</label>
+			</div>
+		</div>
+	{% endfor %}
+
+	<input class="btn #9e9e9e blue" type="submit" value="ingreso">
 </form>
-<a href="{% url 'client:create'%}">Register</a>
+</div>
+
 <a href="#">Olvidaste tu contraseña</a>
 {% endblock content %}
 
