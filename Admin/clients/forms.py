@@ -29,6 +29,12 @@ class CreateUserForm(forms.ModelForm):
 	password = forms.CharField(max_length=20, widget=forms.PasswordInput(),error_messages=ERROR_MESSAGE_PASSWORD)
 	email = forms.CharField(error_messages=ERROR_MESSAGE_EMAIL)
 
+	def __init__(self, *args, **kwargs):
+	    super(CreateUserForm, self).__init__(*args, **kwargs)
+	    self.fields['username'].widget.attrs.update({'id':'username_create'})
+	    self.fields['password'].widget.attrs.update({'id':'password_login'})
+	    self.fields['email'].widget.attrs.update({'id':'email_create'})
+	    
 	class Meta:
 		model= User
 		fields =('username','password','email')

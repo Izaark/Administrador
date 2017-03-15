@@ -33,9 +33,11 @@
 </form>
 </div>
 
-<a href="#">Olvidaste tu contraseña</a>
 {% endblock content %}
 
 {% block footer %}
+<footer>
+  <a href="#">Olvidaste tu contraseña</a>
   <p>Crea una nueva cuenta <a href="{% url 'client:create' %}">aqui</a></p>
+</footer>
 {% endblock footer %}

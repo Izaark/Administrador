@@ -1,18 +1,29 @@
-{% extends "bases/edit_base.html" %}+
 
-
-	{% block title %}
-	Editar usuario	
-	{% endblock title %}
-	{% block subtitle %}
-	Ediar usuario
-	{% endblock subtitle %}
-	{% block content %}
-	<form method="post" action="">
-	{% csrf_token %}
-	{{ form.as_p}}
-	<input type="submit" value="Actualizar usuario">
+ {% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="{% static "client_style.css" %}">
+</head>
+<body>
+<a href="{% url 'client:login' %}">login</a>
+<a href="{% url 'client:edit_password' %}">	actualizar password</a>
+<a href="{% url 'client:edit' %}">editar usuario</a>
+<a href="{% url 'client:create' %}">crear cliente</a>
+<a href="{% url 'client:logout' %}">salir</a>
+{% if messages %}
+	<ul
+	{% for message in messages %}
+	<li {% if message.tags %} class="{{message.tags}}_message" {% endif %} >
+	{{ message }}</li>	
+	{% endfor %}
+	</ul>
+{% endif %}
+<form method="post" action="">
+{% csrf_token %}
+{{ form.as_p}}
+<input type="submit" value="Acutalizar datos">
 </form>
-	{% endblock content %} 
 </body>
 </html>
