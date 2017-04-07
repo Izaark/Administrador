@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Client
 
 #Const
 ERROR_MESSAGE_USER = {'required': 'El username es nesesario',
@@ -59,7 +60,12 @@ class EditPasswordForm(forms.Form):
 			raise forms.ValidationError('los passwords no coinciden')
 
 
-
+class EditClientForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        exclude = ['user']
+    
+			
 
 
 
