@@ -1,29 +1,29 @@
+{% extends "clients/bases/base_client.html" %}
 
- {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="{% static "client_style.css" %}">
-</head>
-<body>
-<a href="{% url 'client:login' %}">login</a>
-<a href="{% url 'client:edit_password' %}">	actualizar password</a>
-<a href="{% url 'client:edit' %}">editar usuario</a>
-<a href="{% url 'client:create' %}">crear cliente</a>
-<a href="{% url 'client:logout' %}">salir</a>
-{% if messages %}
-	<ul
-	{% for message in messages %}
-	<li {% if message.tags %} class="{{message.tags}}_message" {% endif %} >
-	{{ message }}</li>	
+{% block title %}
+	Editar Cliente
+{% endblock title %}
+
+{% block scripts %}
+{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/forms.css" %}">
+{% endblock  %}
+
+{% block content %}
+<div class="class_container_form">
+  <form method="post" action="">
+	{% csrf_token %}
+
+	{% for field in form %}
+		<div class="row">
+			<div class="input-field col s12">
+				{{field}}
+				<label class="{% for class in field.label_classes %} {{class}}
+				{% endfor %}" for="{{field.name}}">{{field.label}}
+				</label>
+			</div>
+		</div>
 	{% endfor %}
-	</ul>
-{% endif %}
-<form method="post" action="">
-{% csrf_token %}
-{{ form.as_p}}
-<input type="submit" value="Acutalizar datos">
-</form>
-</body>
-</html>
+	<input class="btn #9e9e9e blue" type="submit" value="Actualizar">
+
+{% endblock  %}

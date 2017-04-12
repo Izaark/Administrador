@@ -63,7 +63,7 @@ class EditPasswordForm(forms.Form):
 class EditClientForm(forms.ModelForm):
     class Meta:
         model = Client
-        exclude = ['user']
+        exclude = ['user1']
     
 			
 

@@ -97,12 +97,19 @@ def logout(request):
 
 @login_required(login_url = 'client:login')
 def edit_client(request):
-	form = EditClientForm(request.POST or None, instance = client_instance(request.user))	#esto es en shell
+	form_client = EditClientForm(request.POST or None, instance = client_instance(request.user))	#esto es en shell
+	form_user = EditUserForm(request.POST or None, instance = request.user)
 	if request.method =='POST':
 		if form.is_valid():
 			form.save()
 			messages.success(request,'Se actualizarón los datos !!')
-	return render(request,'clients/edit_client.html',{'form':form})
+
+	context = {
+		'form_client':form_client,
+		'form_user':form_user
+	}
+	return render(request,'clients/edit_client.html',context)
+
 
 def client_instance(user):
 	try:
