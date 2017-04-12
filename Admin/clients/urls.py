@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^dashboard/$', DashboardView.as_view(), name='dashboard'),
     url(r'^Create/$', Create.as_view(), name='create'),
     url(r'^show/(?P<username_url>\w+)/$', ShowView.as_view(), name='show'),
-    url(r'^edit/$', Edit.as_view(), name='edit'),
+    url(r'^edit/$', edit_client, name='edit'),
     url(r'^edit_password/$', edit_password, name='edit_password'),
-    url(r'^edit_client/$', edit_client, name='edit_client'),
     ]

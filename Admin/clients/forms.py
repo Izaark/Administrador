@@ -43,9 +43,12 @@ class CreateUserForm(forms.ModelForm):
 class EditUserForm(forms.ModelForm):
 	username = forms.CharField(max_length=30, error_messages=ERROR_MESSAGE_USER)
 	email = forms.CharField(error_messages=ERROR_MESSAGE_EMAIL)
+	first_name = forms.CharField(label='Nombre')
+	last_name = forms.CharField(label='Apellido')
 	class Meta:
 		model = User
 		fields =('username','email','first_name','last_name')
+
 
 class EditPasswordForm(forms.Form):
 	password = forms.CharField(max_length=20, widget=forms.PasswordInput())
@@ -61,9 +64,18 @@ class EditPasswordForm(forms.Form):
 
 
 class EditClientForm(forms.ModelForm):
-    class Meta:
-        model = Client
-        exclude = ['user1']
+	job = forms.CharField(label='Trabajo actual',required=False)
+	bio = forms.CharField(label='Biografía', widget=forms.Textarea,required=False)
+
+	class Meta:
+		model = Client
+		exclude = ['user1']
+
+		def __init__(self, *args, **kwargs):
+			super(EditClientForm, self).__init__(*args, **kwargs)
+			self.fields['job'].widget.attrs.update({'id':'job_edit_client','class':'validate'})
+			self.fields['bio'].widget.attrs.update({'id':'bio_edit_client','class':'validate'})
+
     
 			
 

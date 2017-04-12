@@ -100,9 +100,10 @@ def edit_client(request):
 	form_client = EditClientForm(request.POST or None, instance = client_instance(request.user))	#esto es en shell
 	form_user = EditUserForm(request.POST or None, instance = request.user)
 	if request.method =='POST':
-		if form.is_valid():
-			form.save()
-			messages.success(request,'Se actualizarón los datos !!')
+		if form_client.is_valid() and form_user.is_valid():
+			form_client.save()
+			form_user.save()
+			messages.success(request,'Se actualizarón los datos !')
 
 	context = {
 		'form_client':form_client,
