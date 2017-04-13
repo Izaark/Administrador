@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Dashboard</title>
-</head>
-<body>
-	<h2>Welcome</h2>
-<a href="{% url 'client:logout' %}">Logout</a>
-<a href="{% url 'client:show'  user.username %}">show</a>
-<a href="{% url 'client:edit' %}">edit</a>
-<a href="{% url 'client:edit_password' %}">Edit Password</a>
-</body>
-</html>
+{% extends "clients/bases/base_client.html" %}
+
+{% block title %}
+	dashboard
+{% endblock title %}
+
+{% block scripts %}
+{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/forms.css" %}">
+{% endblock  %}
+
+{% block content %}
+<h3>Welcome {{user.username}}</h3>
+{% endblock  %}

@@ -14,7 +14,6 @@ def password_validation(value_password):
 	if len(value_password) < 5:
 		raise forms.ValidationError('The password requires minimun 5 characters')
 
-
 #Class
 class LoginUserForm(forms.Form):
 	username = forms.CharField(max_length=30)
@@ -35,7 +34,14 @@ class CreateUserForm(forms.ModelForm):
 	    self.fields['username'].widget.attrs.update({'id':'username_create'})
 	    self.fields['password'].widget.attrs.update({'id':'password_login'})
 	    self.fields['email'].widget.attrs.update({'id':'email_create'})
-	    
+
+	def clean_email(self):
+		email = self.cleaned_data.get('email')
+		if User.objects.filter(email=email).count():
+			raise forms.ValidationError('El email debe de ser unico.')
+		return email
+
+
 	class Meta:
 		model= User
 		fields =('username','password','email')
@@ -49,11 +55,17 @@ class EditUserForm(forms.ModelForm):
 		model = User
 		fields =('username','email','first_name','last_name')
 
+	def clean_email(self):
+		email = self.cleaned_data.get('email')
+		if User.objects.filter(email=email).exclude(pk=self.instance.id).count():
+			raise forms.ValidationError('El email debe de ser unico.')
+		return email
+
 
 class EditPasswordForm(forms.Form):
-	password = forms.CharField(max_length=20, widget=forms.PasswordInput())
-	new_password = forms.CharField(max_length=20, widget=forms.PasswordInput(),validators=[password_validation])
-	repeat_password = forms.CharField(max_length=20, widget=forms.PasswordInput(),validators=[password_validation])
+	password = forms.CharField(label='Contraseña actual', max_length=20, widget=forms.PasswordInput())
+	new_password = forms.CharField(label='Nueva contraseña', max_length=20, widget=forms.PasswordInput(),validators=[password_validation])
+	repeat_password = forms.CharField(label='Repetir nueva contraseña',max_length=20, widget=forms.PasswordInput(),validators=[password_validation])
 
 	def clean(self):
 		clean_data = super(EditPasswordForm,self).clean()
@@ -61,7 +73,6 @@ class EditPasswordForm(forms.Form):
 		password2 = clean_data['repeat_password']
 		if password1 != password2:
 			raise forms.ValidationError('los passwords no coinciden')
-
 
 class EditClientForm(forms.ModelForm):
 	job = forms.CharField(label='Trabajo actual',required=False)
