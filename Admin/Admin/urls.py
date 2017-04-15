@@ -20,6 +20,7 @@ from .views import home,error_404
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^client/', include("clients.urls")),
+    url(r'^project/', include("projects.urls")),
     url(r'^$',home,name='home'),
 
 

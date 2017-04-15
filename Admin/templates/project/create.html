@@ -1,0 +1,22 @@
+{% extends "clients/bases/base_client.html" %}
+
+{% block title %}
+	Crear Proyecto
+{% endblock title %}
+
+{% block scripts %}
+{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/forms.css" %}">
+{% endblock  %}
+
+{% block content %}
+
+<div class="class_container_form">
+  <form method="post" action="">
+	{% csrf_token %}
+	{% include "includes/_forms.html" with form=form only %}
+
+	<input class="btn #9e9e9e blue" type="submit" value="Crear">
+</form>
+</div>
+{% endblock  %}
