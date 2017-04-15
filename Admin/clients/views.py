@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate,update_session_auth_hash,login as login_django,logout as logout_django
-from .forms import LoginUserForm,CreateUserForm,EditUserForm,EditPasswordForm,EditClientForm
+from .forms import LoginUserForm,CreateUserForm,EditUserForm,EditPasswordForm,EditClientForm,EditSocialForm
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from .models import Client
+from .models import Client,SocialNetwork
 
 
 class ShowView(DetailView):
@@ -56,21 +56,24 @@ class Create(CreateView):
 		self.object.set_password(self.object.password)
 		self.object.save()
 		return HttpResponseRedirect(self.get_success_url())
-class Edit(LoginRequiredMixin,UpdateView,SuccessMessageMixin):
+
+class EditSocialClass(LoginRequiredMixin,UpdateView,SuccessMessageMixin):
 	login_url ='client:login'
-	model = User
-	template_name = 'clients/edit.html'
-	form_class = EditUserForm
-	success_url = reverse_lazy('client:edit')
-	success_message = "Tu usuario a sido actualizado"
+	model = SocialNetwork
+	template_name = 'clients/edit_social.html'
+	form_class = EditSocialForm
+	success_url = reverse_lazy('client:edit_social')
+	success_message = "Datos actualizados exitosamente"
 
-	def form_valid(self,request,*args,**kwargs):
-		messages.success(self.request,self.success_message)
-		return super(Edit,self).form_valid(request,*args,**kwargs)
-	
+	def get_object(self, queryset = None):
+		return self.get_social_instance()
 
-	def get_object(self,queryset = None):
-		return self.request.user
+	def get_social_instance(self):
+		try:
+			return self.request.user.socialnetwork
+		except:
+			return SocialNetwork(user = self.request.user)
+
 
 def edit_password(request):
 	message = None
@@ -94,9 +97,8 @@ def logout(request):
 	logout_django(request)
 	return redirect('client:login')
 
-
 @login_required(login_url = 'client:login')
-def edit_client(request):
+def edit(request):
 	form_client = EditClientForm(request.POST or None, instance = client_instance(request.user))	#esto es en shell
 	form_user = EditUserForm(request.POST or None, instance = request.user)
 	if request.method =='POST':
@@ -109,7 +111,7 @@ def edit_client(request):
 		'form_client':form_client,
 		'form_user':form_user
 	}
-	return render(request,'clients/edit_client.html',context)
+	return render(request,'clients/edit.html',context)
 
 
 def client_instance(user):

@@ -1,7 +1,8 @@
+
 {% extends "clients/bases/base_client.html" %}
 
 {% block title %}
-	Editar cuenta
+	Editar Redes Sociales
 {% endblock title %}
 
 {% block scripts %}
@@ -10,22 +11,19 @@
 {% endblock  %}
 
 {% block content %}
-
 <div class="collection">
-	<a href="{% url 'client:edit' %}" class="collection-item active">Perfil</a>
+	<a href="{% url 'client:edit' %}" class="collection-item">Perfil</a>
 	<a href="{% url 'client:edit_password' %}" class="collection-item">Password</a>
-	<a href="{% url 'client:edit_social' %}" class="collection-item">Redes sociales</a>
+	<a href="{% url 'client:edit_social' %}" class="collection-item active">Redes sociales</a>
 </div>
 
 <div class="class_container_form">
-  <form method="post" action="">
+	<form method="post" action="">
 	{% csrf_token %}
-
-	{% include "includes/_forms.html" with form=form_user %}
-	{% include "includes/_forms.html" with form=form_client %}
-
+	{% include "includes/_forms.html" with form=form only %}
 
 	<input class="btn #9e9e9e blue" type="submit" value="Actualizar">
-</form>
+	</form>
 </div>
-{% endblock  %}
+
+ {% endblock %} 
