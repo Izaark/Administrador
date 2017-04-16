@@ -5,6 +5,7 @@ from .models import Project
 from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
+from status.models import Status
 
 class CreateProjectClass(CreateView, LoginRequiredMixin):
 	login_url = 'client_login'
@@ -17,6 +18,7 @@ class CreateProjectClass(CreateView, LoginRequiredMixin):
 		self.object = form.save(commit = False)
 		self.object.user = self.request.user
 		self.object.save()
+		self.object.projectstatus_set.create(status = Status.getDefaultStatus())	#crea un status por defaul despues de guardar
 		return HttpResponseRedirect(self.getUrlProject())
 
 	def getUrlProject(self):

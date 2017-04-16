@@ -11,4 +11,5 @@
 
 {% block content %}
 <h3>Welcome {{user.username}}</h3>
+<a href="{% url 'client:show' user.username %}">  {{user.username}}
 {% endblock  %}

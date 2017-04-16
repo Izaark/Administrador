@@ -8,7 +8,7 @@
 <body>
 	<h3>Bienvenido {{ user.username|title }}</h3>
 	<p>biografia</p>
-	<p>{{user.client.bio|truncatechars:14}}</p>
+	<p>{{user.client.bio|truncatechars:200}}</p>
 
 	{% for field in user.socialnetwork|list_field  %}
 		{% with user.socialnetwork|get_value:field as value  %}
@@ -23,3 +23,5 @@
 
 </body>
 </html>
+
+
