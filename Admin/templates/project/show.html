@@ -1,0 +1,16 @@
+{% extends "clients/bases/base_client.html" %}
+
+{% block title %}
+	Mis Proyectos
+{% endblock title %}
+
+{% block scripts %}
+{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/forms.css" %}">
+{% endblock  %}
+
+{% block content %}
+
+<h2>{{project.title}}</h2>
+
+{% endblock  %}
