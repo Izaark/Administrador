@@ -12,3 +12,4 @@ class CreateProjectForm(forms.ModelForm):
 		model = Project
 		fields = ('title','description','dead_line')
 
+

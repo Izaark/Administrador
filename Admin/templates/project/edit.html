@@ -1,7 +1,7 @@
 {% extends "clients/bases/base_client.html" %}
 
 {% block title %}
-	Crear Proyecto
+	Editar Proyecto
 {% endblock title %}
 
 {% block scripts %}
@@ -14,8 +14,14 @@
 <div class="class_container_form">
   <form method="post" action="">
 	{% csrf_token %}
-	{% include "includes/_forms.html" with form=form only %}
-	<input class="btn #9e9e9e blue" type="submit" value="Crear">
+	{% include "includes/_forms.html" with form=form_project only %}
+
+	{% include "includes/_forms.html" with form=forms_status only %}
+
+	<input class="btn #9e9e9e blue" type="submit" value="Actualizar">
 </form>
 </div>
 {% endblock  %}
+{% block footer %}
+	
+{% endblock footer %}
