@@ -12,5 +12,7 @@
 {% block content %}
 
 <h2>{{project.title}}</h2>
+<a href="{% url 'project:edit' project.slug %}">Editar</a>
+
 
 {% endblock  %}

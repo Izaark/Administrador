@@ -8,9 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse_lazy
 from status.models import Status
 from status.forms import StatusChoiceForm
+from django.contrib import messages
 
 class CreateProjectClass(CreateView, LoginRequiredMixin):
-	login_url = 'client_login'
+	login_url = 'client:login'
 	model = Project
 	template_name = 'project/create.html'
 	form_class = CreateProjectForm
@@ -27,9 +28,9 @@ class CreateProjectClass(CreateView, LoginRequiredMixin):
 		return reverse_lazy('project:show', kwargs = {'slug': self.object.slug})
 
 class ListClass(ListView, LoginRequiredMixin):
-	login_url = 'client_login'
+	login_url = 'client:login'
 	template_name = 'project/own.html'
-	paginate_by = 3
+	paginate_by = 10
 
 	def get_queryset(self):
 		return Project.objects.filter(user = self.request.user).order_by('dead_line')
@@ -42,7 +43,17 @@ class ShowClass(DetailView):
 def edit(request, slug=''):
 	project = get_object_or_404(Project, slug=slug)
 	form_project = CreateProjectForm(request.POST or None, instance = project)
-	forms_status = StatusChoiceForm(request.POST or None)
+	forms_status = StatusChoiceForm(request.POST or None, initial={'status': project.get_id_status()})	#Ultimo status de proyecto
+
+	if request.method == 'POST':
+		if form_project.is_valid() and forms_status.is_valid():
+			selection_id = forms_status.cleaned_data['status'].id	
+			form_project.save()
+
+			if selection_id != project.get_id_status():
+				project.projectstatus_set.create(status_id = selection_id)
+			messages.success(request, 'Datos actualizados')
+
 	context = {
 	'form_project': form_project,
 	'forms_status': forms_status

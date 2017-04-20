@@ -18,6 +18,7 @@ class ShowView(DetailView):
 	template_name = 'clients/show.html'
 	slug_field ='username'
 	slug_url_kwarg = 'username_url'
+
 class LoginView(View):
 	form = LoginUserForm()
 	message = None
@@ -41,10 +42,12 @@ class LoginView(View):
 
 	def get_context(self):
 		return {'form':self.form,'message':self.message}
+
 class DashboardView(LoginRequiredMixin,View):
 	login_url = 'client:login'
 	def get(self,request,*args,**kwargs):
 		return render(request,'clients/dashboard.html', {})
+		
 class Create(CreateView):
 	success_url = reverse_lazy('client:login')
 	template_name = 'clients/create.html'

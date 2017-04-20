@@ -19,14 +19,18 @@ class Project(models.Model):
 		return self.title
 
 	def validate_unique(self, exclude=None):
-		if Project.objects.filter(title = self.title).exists():
-			raise ValidationError('Ya se creo un proyecto con el mismo titulo')
+		self.slug = self.create_slug_field(self.title)
+		if Project.objects.filter(slug = self.slug).exclude(pk = self.id).exists():
+			raise ValidationError('Un proyecto con el mismo titulo ya se encuentra registrado.')
 
-	def save(self, *args, **kwargs):
-		self.validate_unique()
-		self.slug = self.title.replace(' ','_').lower()
-		super(Project, self).save(*args, **kwargs)
+	def create_slug_field(self, value):
+		return value.lower().replace(" ", "-")
 
+	def get_id_status(self):
+		return self.projectstatus_set.last().status_id
+
+	def get_status(self):
+		return self.projectstatus_set.last().status
 
 
 class ProjectStatus(models.Model):
