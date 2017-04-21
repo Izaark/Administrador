@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project,ProjectStatus
+from .models import Project, ProjectStatus, ProjectPermission, ProjectUser
 
 class ProjectStatusInline(admin.TabularInline):
 
@@ -12,3 +12,5 @@ class ProjectAdmin(admin.ModelAdmin):
 	inlines = [ProjectStatusInline,]
 
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(ProjectPermission)
+admin.site.register(ProjectUser)

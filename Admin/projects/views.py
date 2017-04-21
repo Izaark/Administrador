@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView,ListView,DetailView
 from .forms import CreateProjectForm
-from .models import Project
+from .models import Project, ProjectUser
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,9 +19,10 @@ class CreateProjectClass(CreateView, LoginRequiredMixin):
 
 	def form_valid(self, form):
 		self.object = form.save(commit = False)
-		self.object.user = self.request.user
+		
 		self.object.save()
 		self.object.projectstatus_set.create(status = Status.getDefaultStatus())	#crea un status por defaul despues de guardar
+		self.object.projectuser_set.create(user= self.request.user, permission_id = 1 )
 		return HttpResponseRedirect(self.getUrlProject())
 
 	def getUrlProject(self):
@@ -30,10 +31,10 @@ class CreateProjectClass(CreateView, LoginRequiredMixin):
 class ListClass(ListView, LoginRequiredMixin):
 	login_url = 'client:login'
 	template_name = 'project/own.html'
-	paginate_by = 10
+	paginate_by = 5
 
 	def get_queryset(self):
-		return Project.objects.filter(user = self.request.user).order_by('dead_line')
+		return ProjectUser.objects.filter(user = self.request.user)
 
 class ShowClass(DetailView):
 	model = Project

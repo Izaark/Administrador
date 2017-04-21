@@ -56,6 +56,9 @@ class ProjectUser(models.Model):
 	permission = models.ForeignKey(ProjectPermission)
 	create_date = models.DateField(default= timezone.now)
 
+	def getProject(self):
+		return self.project
+
 
     
 
