@@ -6,11 +6,9 @@
 	
 	<title> {% block title %} {% endblock %} </title>
 
-		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
-
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>           
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
      
    {% block scripts %} {% endblock %} 
 
@@ -21,14 +19,11 @@
 	    <nav>
 	      <div class="nav-wrapper blue ">
 	      	<a href="{% url 'client:dashboard' %}" class="brand-logo">Administrador</a>
-	        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-	        
+	        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>       
 	        <ul class="right hide-on-med-and-down lighten-2">
 	          <li><a href="{% url 'client:edit' %}">Editar</a></li>
-	          <li><a href="{% url 'client:logout' %}">Salir</a></li>
-	          
+	          <li><a href="{% url 'client:logout' %}">Salir</a></li>          
 	        </ul>
-
 	      </div>
 	    </nav>
 	   </div>

@@ -8,7 +8,7 @@ import datetime
 
 class Project(models.Model):
 
-	user = models.ForeignKey(User, on_delete = models.CASCADE)
+	#user = models.ForeignKey(User, on_delete = models.CASCADE)
 	title = models.CharField(max_length=60)
 	description = models.TextField()
 	dead_line = models.DateField()
@@ -40,6 +40,24 @@ class ProjectStatus(models.Model):
 
 	class Meta:
 		verbose_name_plural='ProjectStatus'
+
+class ProjectPermission(models.Model):
+	title = models.CharField(max_length=50)
+	description = models.TextField()
+	level = models.IntegerField()
+	create_deate = models.DateField(default= timezone.now)
+
+	def __str__(self):
+		return self.title
+
+class ProjectUser(models.Model):
+	project = models.ForeignKey(Project, on_delete = models.CASCADE)
+	user = models.ForeignKey(User)
+	permission = models.ForeignKey(ProjectPermission)
+	create_date = models.DateField(default= timezone.now)
+
+
+    
 
 
 		

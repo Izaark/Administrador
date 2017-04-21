@@ -1,0 +1,39 @@
+[
+	{
+		"model": "status.status",
+		"pk": 1,
+		"fields": 
+		  {
+		  	"title": "Sin registro",
+		  	"description": "El proyecto no fue asignado",
+			"color": "#B40404", 
+			"create_date": "2017-04-16T05:42:14Z",
+			"active": true
+			}
+	},
+		  
+	{
+		"model": "status.status",
+		"pk": 2,
+		 "fields":
+		   {
+		   	"title": "Finalizado",
+			"description": "Finalizado",
+			"color": "blue",
+			"create_date": "2017-04-18T10:09:12Z",
+			"active": true
+			}
+	},
+	{
+		"model": "status.status",
+		"pk": 3, 
+		"fields": 
+			{
+			"title": "En progreso",
+			"description": "en progreso",
+			"color": "green",
+			"create_date": "2017-04-20T07:30:02Z",
+			"active": true
+			}
+	}
+]

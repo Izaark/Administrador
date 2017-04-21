@@ -17,6 +17,7 @@
 	{% for field in form %}
 		<div class="row">
 			<div class="input-field col s12">
+          
 				{% if field.errors %}
 				{{field.errors}}					
 				{% endif %}
@@ -28,7 +29,7 @@
 		</div>
 	{% endfor %}
 
-	<input class="btn #9e9e9e blue" type="submit" value="ingreso">
+	<input class="btn #9e9e9e blue " type="submit" value="Registrarse">
 </form>
 </div>
 {% endblock content %}

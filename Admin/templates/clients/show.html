@@ -1,25 +1,28 @@
+{% extends "clients/bases/base_client.html" %}
 {% load client_extras %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>{{ user.username }}</title>
-</head>
-<body>
-	<h3>Bienvenido {{ user.username|title }}</h3>
-	<p>biografia</p>
-	<p>{{user.client.bio|truncatechars:200}}</p>
 
+{% block title %} Perfil{% endblock title %}
+
+{% block scripts %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static "css/forms.css" %}">
+{% endblock  %}
+
+{% block content %}
+	<h4>Tú perfil {{ user.username|title }}</h4>
+	<h6> Nombre: {{user.first_name}} {{user.last_name}}</p>
+	<p> trabajo: {{user.client.job}}</p>
+	<p >Biografía : {{user.client.bio|truncatechars:200}}</p>
+
+	<h5>Contacto</h5>
 	{% for field in user.socialnetwork|list_field  %}
 		{% with user.socialnetwork|get_value:field as value  %}
-			{% if value %}
-
-		<p> {{field}}</p>
-		<p>{{value}}</p>
-		
+			{% if value %}		
+				<li>
+				{{field}}: <a href={{value}}>{{value}}</a>
+				</li>
 			{% endif %}
 		{% endwith %}
 	{% endfor %}
 
-</body>
-</html>
+{% endblock  %}
