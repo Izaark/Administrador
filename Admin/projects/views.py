@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse_lazy
 from status.models import Status
 from status.forms import StatusChoiceForm
 from django.contrib import messages
+from django.db import transaction
+from .permission_user import EPermission
 
 class CreateProjectClass(CreateView, LoginRequiredMixin):
 	login_url = 'client:login'
@@ -16,13 +18,15 @@ class CreateProjectClass(CreateView, LoginRequiredMixin):
 	template_name = 'project/create.html'
 	form_class = CreateProjectForm
 	
+	@transaction.atomic		#succes si todo se cumple y si no hace un rolback es decir al estado anterior
+	def create_objects(self):
+		self.object.save()
+		self.object.projectstatus_set.create(status = Status.getDefaultStatus())	#crea un status por defaul despues de guardar
+		self.object.projectuser_set.create(user= self.request.user, permission_id = EPermission.maker )	
 
 	def form_valid(self, form):
 		self.object = form.save(commit = False)
-		
-		self.object.save()
-		self.object.projectstatus_set.create(status = Status.getDefaultStatus())	#crea un status por defaul despues de guardar
-		self.object.projectuser_set.create(user= self.request.user, permission_id = 1 )
+		self.create_objects()
 		return HttpResponseRedirect(self.getUrlProject())
 
 	def getUrlProject(self):
